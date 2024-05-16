@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake game</title>
+</head>
+<style>
+    .main__container{
+        background-color: blue;
+        width: 80%;
+        margin: auto;
+        height: 500px;
+        position: relative;
+        overflow-x: hidden;
+        overflow-y: hidden;
+    }
+
+    .snake__square{
+        background-color: pink;
+        width: 30px;
+        height: 30px;
+        position: absolute;
+        top: 50px;
+    }
+
+    .target{
+        position: relative;
+        background-color: yellow;
+    }
+
+</style>
+<body>
+    <main class="main__container">
+        <div class="snake__square" style="left:0px;"></div>
+        <div class="snake__square" style="left:30px;"></div>
+        <div class="snake__square" style="left:60px;"></div>
+        <div class="snake__square target"></div>
+    </main>
+    <script src="./index.js"></script>
+</body>
+</html>
