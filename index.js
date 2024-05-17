@@ -33,32 +33,42 @@ function follow(prevSquares,h_position){
     }
 }
 
-function getRandomInt(max) {
-    return Math.floor(Math.random() * max);
-}
-
-function changeTargetPosition(c_width,c_height){
-    const target=document.querySelector(".target")
-    const targetPosition=getPosition(target)
-    let x=Math.random()*[100,1000][getRandomInt(2)]
-    let y=Math.random()*[100,1000][getRandomInt(2)]
-    if(x>c_width) x=x-c_width
-    if(y>c_height) y=y-c_height
+function changeTargetPosition(c_position){
+    let x=Math.random()*(c_position.width)
+    let y=Math.random()*(c_position.height)
+    if(x+30>c_position.width) x=x-30
+    if(y+30>c_position.height) y=y-30
     target.style.left=x.toString()+"px"
     target.style.top=y.toString()+"px"
-    console.log("x",x,"y",y,"width",c_width,"height",c_height)
+    // console.log("x",x,"y",y,"width",c_position.width,"height",c_position.height)
 }
 
+function checkReachTarget(t_position,h_position){
+    const t_x=t_position.x
+    const t_y=t_position.y
+    const h_x=h_position.x
+    const h_y=h_position.y
+
+    if(h_x>t_x && h_y> t_y && h_y<t_y+30){
+        return true
+    }
+    console.log("h_x:",h_x)
+    console.log("h_y:",h_y)
+    console.log("t_x:",t_x)
+    console.log("t_y:",t_y)
+}
 
 const container=document.querySelector(".main__container")
+const target=document.querySelector(".target")
 const c_position=getPosition(container)
+const t_position=getPosition(target)
 let prev_key=""
 
-changeTargetPosition(c_position.width,c_position.height)
-
+changeTargetPosition(c_position)
 
 document.addEventListener("keypress",(e)=>{
     const squares=[...document.querySelectorAll(".snake__square")]
+    const c_position=getPosition(container)
     let key=e.key.toLowerCase()
 
     const head=squares.pop()
@@ -73,7 +83,7 @@ document.addEventListener("keypress",(e)=>{
         follow(squares,h_position)
         prev_key=key
     }
-    
+
     if(key.toLocaleLowerCase()=="s" && prev_key!="z"){
         y=h_position.y+30
         head.style.top=y.toString()+"px"
@@ -103,6 +113,8 @@ document.addEventListener("keypress",(e)=>{
         follow(squares,h_position)
         prev_key=key
     }
+
+    console.log("result: ",checkReachTarget(t_position,h_position))
 
 })
 
