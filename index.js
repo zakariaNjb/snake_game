@@ -15,7 +15,7 @@ function getPosition(element){
 
 function createSnakeSquare(){
     const div=document.createElement("div")
-    div.setAttribute("class",".snake__square")
+    div.setAttribute("class","snake__square")
     return div
 }
 
@@ -33,14 +33,15 @@ function follow(prevSquares,h_position){
     }
 }
 
-function changeTargetPosition(c_position){
-    let x=Math.random()*(c_position.width)
-    let y=Math.random()*(c_position.height)
+function changeTargetPosition(container,target){
+    const c_position=getPosition(container)
+    let x=parseInt(Math.random()*c_position.width/30)*30
+    let y=parseInt(Math.random()*c_position.height/30)*30
     if(x+30>c_position.width) x=x-30
     if(y+30>c_position.height) y=y-30
     target.style.left=x.toString()+"px"
     target.style.top=y.toString()+"px"
-    // console.log("x",x,"y",y,"width",c_position.width,"height",c_position.height)
+    return getPosition(target)
 }
 
 function checkReachTarget(t_position,h_position){
@@ -49,22 +50,21 @@ function checkReachTarget(t_position,h_position){
     const h_x=h_position.x
     const h_y=h_position.y
 
-    if(h_x>t_x && h_y> t_y && h_y<t_y+30){
+    if((h_y==t_y && (h_x+30==t_x || h_x-30==t_x)) || (h_x==t_x && (h_y+30==t_y || h_y-30==t_y)))
         return true
-    }
-    console.log("h_x:",h_x)
-    console.log("h_y:",h_y)
-    console.log("t_x:",t_x)
-    console.log("t_y:",t_y)
+}
+
+function createTarget(){
+    const target=document.createElement("div")
+    target.classList.add("target")
+    return target
 }
 
 const container=document.querySelector(".main__container")
 const target=document.querySelector(".target")
-const c_position=getPosition(container)
-const t_position=getPosition(target)
-let prev_key=""
+let t_position=changeTargetPosition(container,target)
 
-changeTargetPosition(c_position)
+let prev_key=""
 
 document.addEventListener("keypress",(e)=>{
     const squares=[...document.querySelectorAll(".snake__square")]
@@ -114,7 +114,13 @@ document.addEventListener("keypress",(e)=>{
         prev_key=key
     }
 
-    console.log("result: ",checkReachTarget(t_position,h_position))
+    if(checkReachTarget(t_position,h_position)){
+        console.log("hit the target")
+        const div=createSnakeSquare()
+        // I should append the div in the proper position
+        container.append(div)
+        t_position=changeTargetPosition(container,target)
+    }
 
 })
 
