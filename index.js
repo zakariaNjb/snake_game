@@ -13,12 +13,6 @@ function getPosition(element){
     }
 }
 
-function createSnakeSquare(){
-    const div=document.createElement("div")
-    div.setAttribute("class","snake__square")
-    return div
-}
-
 function follow(prevSquares,h_position){
     let x=h_position.x
     let y=h_position.y
@@ -54,10 +48,50 @@ function checkReachTarget(t_position,h_position){
         return true
 }
 
-function createTarget(){
-    const target=document.createElement("div")
-    target.classList.add("target")
-    return target
+function addSquare(){
+    const queue=document.querySelector("div[data-name='queue']")
+    const preQueue=document.querySelector("div[data-name='pre_queue']")
+    const queuePostition=getPosition(queue)
+    const preQueuePosition=getPosition(preQueue)
+    let x,y
+
+    if(queuePostition.y==preQueuePosition.y && queuePostition.x < preQueuePosition.x){
+        y=queuePostition.y
+        x=queuePostition.x-30
+    }
+
+    if(queuePostition.y==preQueuePosition.y && queuePostition.x > preQueuePosition.x){
+        y=queuePostition.y
+        x=queuePostition.x+30
+    }
+
+    if(queuePostition.x==preQueuePosition.x && queuePostition.y > preQueuePosition.y){
+        x=queuePostition.x
+        y=queuePostition.y+30
+    }
+
+    if(queuePostition.x==preQueuePosition.x && queuePostition.y < preQueuePosition.y){
+        x=queuePostition.x
+        y=queuePostition.y-30
+    }
+
+    const div=document.createElement("div")
+    div.classList.add("snake__square")
+    div.style.left=x.toString() + "px"
+    div.style.top=y.toString() + "px"
+    preQueue.removeAttribute("data-name")
+    queue.setAttribute("data-name","pre_queue")
+    div.setAttribute("data-name","queue")
+    queue.before(div)
+}
+
+function isOver(squares,head){
+    const h_position=getPosition(head)
+    for(index in squares){
+        const s_position=getPosition(squares[index])
+        if(h_position.x==s_position.x && h_position.y==s_position.y)
+            return true
+    }
 }
 
 const container=document.querySelector(".main__container")
@@ -115,12 +149,13 @@ document.addEventListener("keypress",(e)=>{
     }
 
     if(checkReachTarget(t_position,h_position)){
-        console.log("hit the target")
-        const div=createSnakeSquare()
-        // I should append the div in the proper position
-        container.append(div)
+        // Adding new square before the head
+        addSquare()
         t_position=changeTargetPosition(container,target)
     }
 
+    if(isOver(squares,head)){
+        container.innerHTML="Game over"
+    }
 })
 

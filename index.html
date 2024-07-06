@@ -8,9 +8,9 @@
 <style>
     .main__container{
         background-color: blue;
-        width: 80%;
+        width: 390px;
         margin: auto;
-        height: 500px;
+        height: 390px;
         position: relative;
         overflow-x: hidden;
         overflow-y: hidden;
@@ -22,6 +22,9 @@
         height: 30px;
         position: absolute;
         top: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .target{
@@ -34,9 +37,9 @@
 </style>
 <body>
     <main class="main__container">
-        <div class="snake__square" style="left:0px;"></div>
-        <div class="snake__square" style="left:30px;"></div>
-        <div class="snake__square" style="left:60px;"></div>
+        <div class="snake__square" data-name="queue" style="left:0px;"></div>
+        <div class="snake__square" data-name="pre_queue"  style="left:30px;"></div>
+        <div class="snake__square" style="left:60px;">I</div>
         <div class="target"></div>
     </main>
     <script src="./index.js"></script>
